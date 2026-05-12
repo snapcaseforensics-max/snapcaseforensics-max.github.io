@@ -1,2 +1,3 @@
-# github.io
-Public Web page
+# SnapCase Forensics Website
+
+Static GitHub Pages site for SnapCase.
