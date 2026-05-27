@@ -8,7 +8,7 @@
   <meta property="og:title" content="SnapCase Video Downloader" />
   <meta property="og:description" content="Standalone video download, clipping, live recording, queue tracking, thumbnails, and preservation logs for investigators." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="../assets/snapcase-video-downloader-pro-logo.png" />
+  <meta property="og:image" content="../assets/video-downloader-pro-white-logo.png?v=2" />
   <style>
     :root {
       --ink: #162033;
@@ -121,9 +121,18 @@
       color: #fff;
       overflow: hidden;
       background:
-        linear-gradient(90deg, rgba(7,13,25,.98) 0%, rgba(7,13,25,.84) 52%, rgba(7,13,25,.12) 100%),
-        url("../assets/snapcase-video-downloader-pro-logo.png") right clamp(20px, 6vw, 110px) top 108px / min(560px, 44vw) auto no-repeat,
+        linear-gradient(90deg, rgba(7,13,25,.98) 0%, rgba(7,13,25,.84) 52%, rgba(7,13,25,.18) 100%),
         #07101c;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: url("../assets/video-downloader-pro-white-logo.png?v=2") right clamp(20px, 6vw, 110px) top 102px / min(560px, 44vw) auto no-repeat;
+      filter: brightness(1.18);
+      opacity: .72;
     }
     .hero::after {
       content: "";
@@ -131,9 +140,11 @@
       inset: auto 0 0 0;
       height: 5px;
       background: linear-gradient(90deg, var(--amber), #22d3ee, var(--red));
-      z-index: -1;
+      z-index: 1;
     }
     .hero-grid {
+      position: relative;
+      z-index: 1;
       display: grid;
       grid-template-columns: minmax(0, 790px) minmax(330px, 520px);
       gap: 38px;
@@ -485,7 +496,7 @@
       color: #fff;
       background:
         linear-gradient(90deg, rgba(7,13,25,.96), rgba(7,13,25,.84)),
-        url("../assets/snapcase-video-downloader-pro-logo.png") center right 9% / min(360px, 46vw) auto no-repeat,
+        url("../assets/video-downloader-pro-white-logo.png?v=2") center right 9% / min(360px, 46vw) auto no-repeat,
         #07101c;
     }
     .closing .kicker { color: #67e8f9; }
@@ -516,11 +527,12 @@
       .hero {
         min-height: auto;
         padding-top: 120px;
-        background:
-          linear-gradient(180deg, rgba(7,13,25,.98) 0%, rgba(7,13,25,.88) 58%, rgba(7,13,25,.5) 100%),
-          url("../assets/snapcase-video-downloader-pro-logo.png") center top 250px / min(520px, 84vw) auto no-repeat,
-          #07101c;
+        background: linear-gradient(180deg, rgba(7,13,25,.98) 0%, rgba(7,13,25,.88) 58%, rgba(7,13,25,.5) 100%), #07101c;
         padding-bottom: 260px;
+      }
+      .hero::before {
+        background-position: center top 250px;
+        background-size: min(520px, 84vw) auto;
       }
       .feature-grid,
       .product-card-grid {
@@ -565,7 +577,7 @@
 <body>
   <header class="site-header">
     <a class="brand" href="../" aria-label="SnapCase products home">
-      <img src="../assets/snapcase-video-downloader-pro-logo.png" alt="SnapCase Video Downloader Pro" />
+      <img src="../assets/video-downloader-pro-white-logo.png?v=2" alt="SnapCase Video Downloader Pro" />
     </a>
     <nav aria-label="Primary navigation">
       <a class="product-link" href="../#products">Our Products</a>
@@ -635,7 +647,7 @@
             </div>
           </a>
           <a class="product-card" href="./" aria-label="Open SnapCase Video Downloader product page">
-            <div class="product-icon"><img src="../assets/snapcase-video-downloader-pro-logo.png" alt="" /></div>
+            <div class="product-icon"><img src="../assets/video-downloader-pro-white-logo.png?v=2" alt="" /></div>
             <div>
               <h3>SnapCase Video Downloader</h3>
               <p>Standalone video download, clipping, screen recording, queue tracking, thumbnails, and preservation logs.</p>
