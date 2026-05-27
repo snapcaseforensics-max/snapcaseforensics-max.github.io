@@ -8,7 +8,7 @@
   <meta property="og:title" content="SnapCase" />
   <meta property="og:description" content="Public evidence capture, case reports, OCR, bookmarks, media matching, targets, local indexing, and investigator-controlled case intelligence." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="assets/snapcase-suite-mark.png" />
+  <meta property="og:image" content="assets/snapcase-new-logo.png" />
   <style>
     :root {
       --ink: #172033;
@@ -61,13 +61,9 @@
       font-weight: 950;
     }
     .brand img {
-      width: 36px;
-      height: 36px;
+      width: auto;
+      height: clamp(36px, 4.4vw, 48px);
       object-fit: contain;
-    }
-    .brand span {
-      font-size: 18px;
-      letter-spacing: 0;
     }
     nav {
       display: flex;
@@ -127,7 +123,7 @@
       overflow: hidden;
       background:
         linear-gradient(90deg, rgba(7,13,25,.97) 0%, rgba(7,13,25,.86) 49%, rgba(7,13,25,.36) 100%),
-        url("assets/snapcase-suite-mark.png") center right 8% / min(620px, 72vw) auto no-repeat,
+        url("assets/snapcase-new-logo.png") center right 8% / min(620px, 72vw) auto no-repeat,
         #07101c;
     }
     .hero::after {
@@ -634,7 +630,7 @@
       color: #fff;
       background:
         linear-gradient(90deg, rgba(7,13,25,.96), rgba(7,13,25,.82)),
-        url("assets/snapcase-logo.png") center right 9% / min(340px, 52vw) auto no-repeat,
+        url("assets/snapcase-new-logo.png") center right 9% / min(340px, 52vw) auto no-repeat,
         #07101c;
     }
     .evidence .kicker { color: #67e8f9; }
@@ -685,7 +681,7 @@
         padding-top: 120px;
         background:
           linear-gradient(180deg, rgba(7,13,25,.97) 0%, rgba(7,13,25,.88) 58%, rgba(7,13,25,.68) 100%),
-          url("assets/snapcase-suite-mark.png") center bottom 34px / min(420px, 76vw) auto no-repeat,
+          url("assets/snapcase-new-logo.png") center bottom 34px / min(420px, 76vw) auto no-repeat,
           #07101c;
         padding-bottom: 260px;
       }
@@ -725,7 +721,7 @@
         padding-left: 18px;
         padding-right: 18px;
       }
-      .brand span { font-size: 16px; }
+      .brand img { height: 42px; }
       .hero {
         padding-left: 20px;
         padding-right: 20px;
@@ -761,8 +757,7 @@
 <body>
   <header class="site-header">
     <a class="brand" href="#top" aria-label="SnapCase home">
-      <img src="assets/snapcase-logo.png" alt="" />
-      <span>SnapCase</span>
+      <img src="assets/snapcase-new-logo.png" alt="SnapCase" />
     </a>
     <nav aria-label="Primary navigation">
       <a class="product-link" href="#products">Our Products</a>
@@ -908,7 +903,7 @@
         </div>
         <div class="console" aria-label="SnapCase interface overview">
           <div class="console-side">
-            <img class="console-logo" src="assets/snapcase-logo.png" alt="SnapCase logo" />
+            <img class="console-logo" src="assets/snapcase-new-logo.png" alt="SnapCase logo" />
             <div class="console-tab"><span>FB</span><span>Facebook evidence</span></div>
             <div class="console-tab"><span>IG</span><span>Instagram and Threads</span></div>
             <div class="console-tab"><span>X</span><span>X and public posts</span></div>

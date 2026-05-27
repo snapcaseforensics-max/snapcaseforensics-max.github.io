@@ -8,7 +8,7 @@
   <meta property="og:title" content="SnapCase Video Downloader" />
   <meta property="og:description" content="Standalone video download, clipping, live recording, queue tracking, thumbnails, and preservation logs for investigators." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="../assets/snapcase-suite-mark.png" />
+  <meta property="og:image" content="../assets/snapcase-new-logo.png" />
   <style>
     :root {
       --ink: #162033;
@@ -60,13 +60,9 @@
       font-weight: 950;
     }
     .brand img {
-      width: 42px;
-      height: 42px;
+      width: auto;
+      height: clamp(36px, 4.4vw, 48px);
       object-fit: contain;
-    }
-    .brand span {
-      font-size: 18px;
-      letter-spacing: 0;
     }
     nav {
       display: flex;
@@ -126,7 +122,7 @@
       overflow: hidden;
       background:
         linear-gradient(90deg, rgba(7,13,25,.98) 0%, rgba(7,13,25,.86) 52%, rgba(7,13,25,.42) 100%),
-        url("../assets/snapcase-suite-mark.png") center right 8% / min(620px, 72vw) auto no-repeat,
+        url("../assets/snapcase-new-logo.png") center right 8% / min(620px, 72vw) auto no-repeat,
         #07101c;
     }
     .hero::after {
@@ -489,7 +485,7 @@
       color: #fff;
       background:
         linear-gradient(90deg, rgba(7,13,25,.96), rgba(7,13,25,.84)),
-        url("../assets/snapcase-logo.png") center right 9% / min(430px, 64vw) auto no-repeat,
+        url("../assets/snapcase-new-logo.png") center right 9% / min(430px, 64vw) auto no-repeat,
         #07101c;
     }
     .closing .kicker { color: #67e8f9; }
@@ -522,7 +518,7 @@
         padding-top: 120px;
         background:
           linear-gradient(180deg, rgba(7,13,25,.98) 0%, rgba(7,13,25,.9) 58%, rgba(7,13,25,.7) 100%),
-          url("../assets/snapcase-suite-mark.png") center bottom 34px / min(420px, 76vw) auto no-repeat,
+          url("../assets/snapcase-new-logo.png") center bottom 34px / min(420px, 76vw) auto no-repeat,
           #07101c;
         padding-bottom: 260px;
       }
@@ -544,7 +540,7 @@
         padding-left: 18px;
         padding-right: 18px;
       }
-      .brand span { font-size: 16px; }
+      .brand img { height: 42px; }
       .hero {
         padding-left: 20px;
         padding-right: 20px;
@@ -569,8 +565,7 @@
 <body>
   <header class="site-header">
     <a class="brand" href="../" aria-label="SnapCase products home">
-      <img src="../assets/snapcase-logo.png" alt="" />
-      <span>SnapCase</span>
+      <img src="../assets/snapcase-new-logo.png" alt="SnapCase" />
     </a>
     <nav aria-label="Primary navigation">
       <a class="product-link" href="../#products">Our Products</a>
