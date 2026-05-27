@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SnapCase Video Downloader | Standalone Video Preservation</title>
+  <meta name="description" content="SnapCase Video Downloader is a standalone companion app for preserving public video, clips, live recordings, thumbnails, queues, and local preservation logs." />
+  <meta property="og:title" content="SnapCase Video Downloader" />
+  <meta property="og:description" content="Standalone video download, clipping, live recording, queue tracking, thumbnails, and preservation logs for investigators." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="../assets/snapcase-suite-mark.png" />
+  <style>
+    :root {
+      --ink: #162033;
+      --muted: #526173;
+      --line: #d8e2ec;
+      --paper: #ffffff;
+      --band: #f6f8fb;
+      --navy: #09111f;
+      --navy-2: #101d31;
+      --amber: #d97706;
+      --red: #c0264d;
+      --teal: #007c74;
+      --blue: #1d4ed8;
+      --radius: 8px;
+      --shadow: 0 18px 44px rgba(13, 24, 42, .14);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    a { color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    .site-header {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 12px clamp(18px, 4vw, 58px);
+      color: #fff;
+      background: rgba(7, 13, 25, .88);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(14px);
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-weight: 950;
+    }
+    .brand img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+    }
+    .brand span {
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 14px;
+      font-weight: 780;
+    }
+    nav a {
+      color: rgba(255,255,255,.82);
+      text-decoration: none;
+    }
+    nav a:hover { color: #fff; }
+    nav a.product-link {
+      color: #fff;
+      padding: 8px 10px;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 6px;
+      background: rgba(255,255,255,.08);
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 11px 16px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      font-weight: 900;
+      text-decoration: none;
+      transition: transform .16s ease, border-color .16s ease, background .16s ease;
+    }
+    .button:hover { transform: translateY(-1px); }
+    .button.primary {
+      background: #fff;
+      color: #0b1320;
+    }
+    .button.secondary {
+      color: #fff;
+      border-color: rgba(255,255,255,.36);
+      background: rgba(255,255,255,.08);
+    }
+    .button.dark {
+      color: #fff;
+      background: var(--navy);
+    }
+
+    .hero {
+      min-height: 88vh;
+      display: grid;
+      align-items: end;
+      position: relative;
+      isolation: isolate;
+      padding: 128px clamp(20px, 5vw, 76px) 58px;
+      color: #fff;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(7,13,25,.98) 0%, rgba(7,13,25,.86) 52%, rgba(7,13,25,.42) 100%),
+        url("../assets/snapcase-suite-mark.png") center right 8% / min(620px, 72vw) auto no-repeat,
+        #07101c;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--amber), #22d3ee, var(--red));
+      z-index: -1;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 790px) minmax(330px, 520px);
+      gap: 38px;
+      align-items: end;
+      width: min(1280px, 100%);
+    }
+    .eyebrow {
+      margin: 0 0 12px;
+      color: #fbbf24;
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 0;
+      max-width: 840px;
+      font-size: clamp(48px, 8vw, 96px);
+      line-height: .96;
+      letter-spacing: 0;
+    }
+    .hero-lede {
+      margin: 24px 0 0;
+      max-width: 760px;
+      color: rgba(255,255,255,.87);
+      font-size: clamp(19px, 2.1vw, 27px);
+      line-height: 1.34;
+      font-weight: 690;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+    .video-console {
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: var(--radius);
+      background: rgba(9, 17, 31, .9);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .console-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.06);
+    }
+    .traffic {
+      display: flex;
+      gap: 6px;
+    }
+    .traffic span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #f59e0b;
+    }
+    .traffic span:nth-child(2) { background: #22c55e; }
+    .traffic span:nth-child(3) { background: #38bdf8; }
+    .console-top b {
+      color: #e8f3ff;
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .console-body {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+    .url-row {
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      color: #cbd5e1;
+      background: #0b1526;
+      font-size: 14px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .download-row {
+      display: grid;
+      grid-template-columns: 68px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.06);
+    }
+    .thumb {
+      height: 52px;
+      border-radius: 6px;
+      background:
+        linear-gradient(135deg, rgba(251,191,36,.9), rgba(192,38,77,.86)),
+        #f59e0b;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 950;
+    }
+    .download-row b {
+      color: #fff;
+      display: block;
+      font-size: 15px;
+    }
+    .download-row span {
+      display: block;
+      margin-top: 4px;
+      color: #b7c7dc;
+      font-size: 13px;
+    }
+    .progress {
+      height: 8px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.12);
+      overflow: hidden;
+      margin-top: 10px;
+    }
+    .progress i {
+      display: block;
+      width: 72%;
+      height: 100%;
+      background: linear-gradient(90deg, #f59e0b, #22d3ee);
+    }
+
+    main section {
+      padding: 76px clamp(20px, 5vw, 76px);
+    }
+    .inner {
+      width: min(1220px, 100%);
+      margin: 0 auto;
+    }
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 520px);
+      gap: 32px;
+      align-items: end;
+      margin-bottom: 28px;
+    }
+    .kicker {
+      margin: 0 0 12px;
+      color: var(--teal);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    h2 {
+      margin: 0;
+      max-width: 830px;
+      font-size: clamp(32px, 4.5vw, 58px);
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+    .lead {
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+      font-weight: 650;
+    }
+
+    .products {
+      background: var(--band);
+      border-bottom: 1px solid var(--line);
+    }
+    .product-card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 26px;
+    }
+    .product-card {
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      gap: 18px;
+      align-items: start;
+      min-height: 214px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(13, 24, 42, .06);
+      text-decoration: none;
+    }
+    .product-card:hover {
+      border-color: #93c5fd;
+      transform: translateY(-1px);
+    }
+    .product-icon {
+      display: grid;
+      place-items: center;
+      width: 86px;
+      height: 86px;
+      border-radius: var(--radius);
+      background: var(--navy);
+      color: #fff;
+      font-size: 30px;
+      font-weight: 950;
+    }
+    .product-icon img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+    }
+    .product-card p {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+    .product-card span {
+      display: inline-block;
+      margin-top: 18px;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .features {
+      background: #fff;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .feature-card {
+      min-height: 228px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(13, 24, 42, .06);
+    }
+    .feature-card .bar {
+      width: 44px;
+      height: 5px;
+      border-radius: 5px;
+      margin-bottom: 18px;
+      background: var(--amber);
+    }
+    .feature-card:nth-child(2) .bar,
+    .feature-card:nth-child(5) .bar { background: var(--red); }
+    .feature-card:nth-child(3) .bar,
+    .feature-card:nth-child(6) .bar { background: var(--teal); }
+    .feature-card p {
+      margin: 12px 0 0;
+      color: var(--muted);
+    }
+
+    .workflow {
+      color: #fff;
+      background: var(--navy);
+    }
+    .workflow .kicker { color: #fbbf24; }
+    .workflow .lead { color: #c9d6e5; }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.14);
+    }
+    .step {
+      min-height: 230px;
+      padding: 24px;
+      background: #111c2f;
+    }
+    .step span {
+      color: #fbbf24;
+      font-size: 13px;
+      font-weight: 950;
+    }
+    .step b {
+      display: block;
+      margin: 16px 0 8px;
+      font-size: 20px;
+    }
+    .step p {
+      margin: 0;
+      color: #cbd5e1;
+    }
+
+    .evidence {
+      background: var(--band);
+    }
+    .evidence-layout {
+      display: grid;
+      grid-template-columns: minmax(0, .95fr) minmax(320px, 1.05fr);
+      gap: 32px;
+      align-items: start;
+    }
+    .check-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 22px;
+    }
+    .check {
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      color: #334155;
+      font-weight: 750;
+    }
+    .log-panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      padding: 18px;
+      box-shadow: 0 8px 24px rgba(13, 24, 42, .06);
+    }
+    .log-panel b {
+      display: block;
+      margin-bottom: 14px;
+      color: var(--ink);
+    }
+    .log-line {
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      gap: 12px;
+      padding: 11px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .log-line strong {
+      color: var(--ink);
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .closing {
+      color: #fff;
+      background:
+        linear-gradient(90deg, rgba(7,13,25,.96), rgba(7,13,25,.84)),
+        url("../assets/snapcase-logo.png") center right 9% / min(430px, 64vw) auto no-repeat,
+        #07101c;
+    }
+    .closing .kicker { color: #67e8f9; }
+    .closing p {
+      max-width: 760px;
+      color: rgba(255,255,255,.82);
+      font-size: 19px;
+      margin: 18px 0 0;
+    }
+    .site-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      padding: 22px clamp(20px, 5vw, 76px);
+      color: #64748b;
+      background: #fff;
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+    }
+
+    @media (max-width: 1040px) {
+      .hero-grid,
+      .section-head,
+      .evidence-layout {
+        grid-template-columns: 1fr;
+      }
+      .hero {
+        min-height: auto;
+        padding-top: 120px;
+        background:
+          linear-gradient(180deg, rgba(7,13,25,.98) 0%, rgba(7,13,25,.9) 58%, rgba(7,13,25,.7) 100%),
+          url("../assets/snapcase-suite-mark.png") center bottom 34px / min(420px, 76vw) auto no-repeat,
+          #07101c;
+        padding-bottom: 260px;
+      }
+      .feature-grid,
+      .product-card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      nav { display: none; }
+      main section {
+        padding: 58px 20px;
+      }
+      .site-header {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+      .brand span { font-size: 16px; }
+      .hero {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .button { width: 100%; }
+      .feature-grid,
+      .product-card-grid,
+      .steps {
+        grid-template-columns: 1fr;
+      }
+      .product-card,
+      .log-line {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../" aria-label="SnapCase products home">
+      <img src="../assets/snapcase-logo.png" alt="" />
+      <span>SnapCase</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a class="product-link" href="../#products">Our Products</a>
+      <a href="../">SnapCase Suite</a>
+      <a href="#features">Features</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#evidence">Evidence Logs</a>
+    </nav>
+  </header>
+
+  <section id="top" class="hero">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">Standalone Video Preservation</p>
+        <h1>SnapCase Video Downloader</h1>
+        <p class="hero-lede">A focused companion app for preserving public video, clipping ranges, recording live sessions, and keeping local queue logs for investigative review.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#features">Explore Features</a>
+          <a class="button secondary" href="../">Open SnapCase Suite Page</a>
+        </div>
+      </div>
+      <div class="video-console" aria-label="Video Downloader console preview">
+        <div class="console-top">
+          <div class="traffic" aria-hidden="true"><span></span><span></span><span></span></div>
+          <b>Video Queue</b>
+        </div>
+        <div class="console-body">
+          <div class="url-row">https://example.com/public-video/source</div>
+          <div class="download-row">
+            <div class="thumb">MP4</div>
+            <div>
+              <b>Evidence clip download</b>
+              <span>Range 00:42 to 02:10 - system audio preserved</span>
+              <div class="progress"><i></i></div>
+            </div>
+          </div>
+          <div class="download-row">
+            <div class="thumb">REC</div>
+            <div>
+              <b>Live recording capture</b>
+              <span>Selector region active - local output folder locked</span>
+              <div class="progress"><i style="width:48%"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <section class="products">
+      <div class="inner">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Our Products</p>
+            <h2>Video preservation beside the SnapCase Suite workflow.</h2>
+          </div>
+          <p class="lead">Video Downloader is standalone. SnapCase Suite remains the main case intelligence and reporting platform.</p>
+        </div>
+        <div class="product-card-grid">
+          <a class="product-card" href="../" aria-label="Open SnapCase Suite product page">
+            <div class="product-icon"><img src="../assets/snapcase-logo.png" alt="" /></div>
+            <div>
+              <h3>SnapCase Suite</h3>
+              <p>Case capture, reports, OCR, bookmarks, targets, face/object matching, local indexing, and investigator-controlled evidence organization.</p>
+              <span>Open Suite Page</span>
+            </div>
+          </a>
+          <a class="product-card" href="./" aria-label="Open SnapCase Video Downloader product page">
+            <div class="product-icon">VD</div>
+            <div>
+              <h3>SnapCase Video Downloader</h3>
+              <p>Standalone video download, clipping, screen recording, queue tracking, thumbnails, and preservation logs.</p>
+              <span>Current page</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="features">
+      <div class="inner">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Core Features</p>
+            <h2>Built for local video preservation work.</h2>
+          </div>
+          <p class="lead">The app focuses on getting public video evidence out of volatile web pages and into local files with useful context.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="bar"></div>
+            <h3>Detect and download</h3>
+            <p>Start from a public source URL, detect available media, and preserve video files into a selected local evidence folder.</p>
+          </article>
+          <article class="feature-card">
+            <div class="bar"></div>
+            <h3>Clip ranges</h3>
+            <p>Capture the relevant segment instead of storing entire long videos when only a specific moment matters.</p>
+          </article>
+          <article class="feature-card">
+            <div class="bar"></div>
+            <h3>Live recording</h3>
+            <p>Record a selected screen region for live streams, disappearing playback, or sources that cannot be downloaded directly.</p>
+          </article>
+          <article class="feature-card">
+            <div class="bar"></div>
+            <h3>Audio handling</h3>
+            <p>Choose audio sources, preserve system audio where configured, and control volume for cleaner local recordings.</p>
+          </article>
+          <article class="feature-card">
+            <div class="bar"></div>
+            <h3>Queue and thumbnails</h3>
+            <p>Track active, completed, paused, failed, and cancelled jobs with thumbnails and quick reveal actions.</p>
+          </article>
+          <article class="feature-card">
+            <div class="bar"></div>
+            <h3>Preservation logs</h3>
+            <p>Keep job history, source URLs, output paths, capture times, and status logs close to the saved video files.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="workflow" class="workflow">
+      <div class="inner">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Workflow</p>
+            <h2>From public video source to local evidence file.</h2>
+          </div>
+          <p class="lead">The product is intentionally narrow: find the media, preserve the clip, keep the local file and log clear.</p>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <span>01</span>
+            <b>Choose output folder</b>
+            <p>Set the destination for downloaded videos, clips, recordings, thumbnails, and logs.</p>
+          </article>
+          <article class="step">
+            <span>02</span>
+            <b>Open the source</b>
+            <p>Paste the public URL or prepare the live playback area for recording.</p>
+          </article>
+          <article class="step">
+            <span>03</span>
+            <b>Preserve the media</b>
+            <p>Download a video, capture a clip range, or record the selected screen region.</p>
+          </article>
+          <article class="step">
+            <span>04</span>
+            <b>Review the file</b>
+            <p>Use the queue, thumbnails, reveal actions, and job log to verify what was saved.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="evidence" class="evidence">
+      <div class="inner evidence-layout">
+        <div>
+          <p class="kicker">Evidence Context</p>
+          <h2>Every saved video should remain explainable.</h2>
+          <p class="lead" style="margin-top:18px;">Video Downloader is not a full case management system. It is the focused companion for video acquisition, while SnapCase Suite handles broader case intelligence and reporting.</p>
+          <div class="check-list">
+            <div class="check">Source URL and output path kept together</div>
+            <div class="check">Local files organized by selected destination</div>
+            <div class="check">Job status, errors, and completion history visible in the queue</div>
+            <div class="check">Companion link back to SnapCase Suite for case-level reporting</div>
+          </div>
+        </div>
+        <div class="log-panel">
+          <b>Sample preservation log</b>
+          <div class="log-line"><strong>Source</strong><span>Public video URL captured from investigator review</span></div>
+          <div class="log-line"><strong>Mode</strong><span>Download, clip range, or live recording</span></div>
+          <div class="log-line"><strong>Output</strong><span>Local evidence folder with video file and thumbnail</span></div>
+          <div class="log-line"><strong>Status</strong><span>Done, failed, cancelled, paused, or recording</span></div>
+          <div class="log-line"><strong>Review</strong><span>Reveal saved file and copy job details for notes</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing">
+      <div class="inner">
+        <p class="kicker">Standalone By Design</p>
+        <h2>Use Video Downloader for acquisition and SnapCase Suite for the case package.</h2>
+        <p>Keeping the tools separate lets the downloader stay fast and focused while the suite remains centered on case evidence, reports, OCR, targets, and cross-case intelligence.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="../">Open SnapCase Suite Page</a>
+          <a class="button secondary" href="#top">Back to Top</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>SnapCase Video Downloader</span>
+    <span>Standalone video preservation companion for SnapCase workflows.</span>
+  </footer>
+</body>
+</html>
