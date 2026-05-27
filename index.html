@@ -4,23 +4,27 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SnapCase | Public Evidence Intelligence for Investigators</title>
-  <meta name="description" content="SnapCase is an investigator-first public evidence intelligence platform for preserving social media evidence, organizing captures, and finding relevant signals across cases." />
+  <meta name="description" content="SnapCase is an investigator-first public evidence intelligence platform for preserving online evidence, organizing captures, and surfacing useful case signals." />
   <meta property="og:title" content="SnapCase" />
-  <meta property="og:description" content="Public evidence capture, reporting, bookmarks, comments, media indexing, OCR, and investigator-controlled intelligence workflows." />
+  <meta property="og:description" content="Public evidence capture, case reports, OCR, bookmarks, media matching, targets, local indexing, and investigator-controlled case intelligence." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="assets/snapcase-suite-mark.png" />
   <style>
     :root {
-      --ink: #111827;
-      --muted: #56657a;
-      --line: #d8e0ea;
+      --ink: #172033;
+      --muted: #516072;
+      --line: #d9e2eb;
       --paper: #ffffff;
-      --soft: #f5f7fa;
-      --teal: #0f766e;
-      --red: #e11d48;
-      --gold: #d97706;
-      --blue: #2563eb;
+      --band: #f6f8fb;
+      --navy: #0b1320;
+      --navy-2: #101d31;
+      --teal: #007c74;
+      --red: #c0264d;
+      --gold: #b7791f;
+      --blue: #1d4ed8;
+      --green: #15803d;
       --radius: 8px;
+      --shadow: 0 18px 44px rgba(13, 24, 42, .14);
     }
 
     * { box-sizing: border-box; }
@@ -37,18 +41,16 @@
 
     .site-header {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 20;
+      inset: 0 0 auto 0;
+      z-index: 30;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 24px;
-      padding: 14px clamp(18px, 4vw, 52px);
+      padding: 12px clamp(18px, 4vw, 58px);
       color: #fff;
-      background: rgba(7, 12, 22, 0.82);
-      border-bottom: 1px solid rgba(255,255,255,0.12);
+      background: rgba(7, 13, 25, .86);
+      border-bottom: 1px solid rgba(255,255,255,.12);
       backdrop-filter: blur(14px);
     }
     .brand {
@@ -56,8 +58,7 @@
       align-items: center;
       gap: 12px;
       text-decoration: none;
-      font-weight: 900;
-      letter-spacing: 0;
+      font-weight: 950;
     }
     .brand img {
       width: 42px;
@@ -66,158 +67,207 @@
     }
     .brand span {
       font-size: 18px;
+      letter-spacing: 0;
     }
     nav {
       display: flex;
       align-items: center;
       gap: 18px;
       font-size: 14px;
-      font-weight: 750;
+      font-weight: 780;
     }
     nav a {
-      color: rgba(255,255,255,0.82);
+      color: rgba(255,255,255,.82);
       text-decoration: none;
     }
     nav a:hover { color: #fff; }
 
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 11px 16px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      font-weight: 900;
+      text-decoration: none;
+      transition: transform .16s ease, border-color .16s ease, background .16s ease;
+    }
+    .button:hover { transform: translateY(-1px); }
+    .button.primary {
+      background: #fff;
+      color: #0b1320;
+    }
+    .button.secondary {
+      color: #fff;
+      border-color: rgba(255,255,255,.36);
+      background: rgba(255,255,255,.08);
+    }
+    .button.dark {
+      color: #fff;
+      background: var(--navy);
+    }
+
     .hero {
-      min-height: 82vh;
+      min-height: 88vh;
       display: grid;
       align-items: end;
       position: relative;
       isolation: isolate;
-      padding: 128px clamp(20px, 5vw, 76px) 74px;
+      padding: 128px clamp(20px, 5vw, 76px) 58px;
       color: #fff;
       overflow: hidden;
       background:
-        linear-gradient(90deg, rgba(7,12,22,0.94) 0%, rgba(7,12,22,0.76) 50%, rgba(7,12,22,0.36) 100%),
-        url("assets/snapcase-suite-mark.png") center right 11% / min(560px, 70vw) auto no-repeat,
+        linear-gradient(90deg, rgba(7,13,25,.97) 0%, rgba(7,13,25,.86) 49%, rgba(7,13,25,.36) 100%),
+        url("assets/snapcase-suite-mark.png") center right 8% / min(620px, 72vw) auto no-repeat,
         #07101c;
     }
     .hero::after {
       content: "";
       position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: auto 0 0 0;
       height: 5px;
       background: linear-gradient(90deg, var(--red), #22d3ee, var(--gold));
       z-index: -1;
     }
-    .hero-copy {
-      max-width: 800px;
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 820px) minmax(330px, 500px);
+      gap: 38px;
+      align-items: end;
+      width: min(1280px, 100%);
     }
     .eyebrow {
-      margin: 0 0 14px;
+      margin: 0 0 12px;
       color: #67e8f9;
       font-size: 13px;
       font-weight: 950;
-      letter-spacing: 0.14em;
+      letter-spacing: .14em;
       text-transform: uppercase;
     }
     h1 {
       margin: 0;
-      max-width: 760px;
-      font-size: clamp(52px, 9vw, 104px);
-      line-height: 0.96;
+      max-width: 820px;
+      font-size: clamp(54px, 9vw, 110px);
+      line-height: .94;
       letter-spacing: 0;
     }
     .hero-lede {
       margin: 24px 0 0;
-      max-width: 760px;
-      color: rgba(255,255,255,0.86);
-      font-size: clamp(19px, 2.3vw, 27px);
-      line-height: 1.35;
-      font-weight: 680;
+      max-width: 790px;
+      color: rgba(255,255,255,.87);
+      font-size: clamp(19px, 2.1vw, 27px);
+      line-height: 1.34;
+      font-weight: 690;
     }
     .hero-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-top: 32px;
+      margin-top: 30px;
     }
-    .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 46px;
-      padding: 12px 18px;
-      border-radius: 999px;
-      font-weight: 900;
-      text-decoration: none;
-      border: 1px solid transparent;
+    .hero-proof {
+      display: grid;
+      gap: 10px;
     }
-    .button.primary {
-      background: #fff;
-      color: #0b1220;
+    .proof-row {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 12px;
+      padding: 13px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.08);
+      backdrop-filter: blur(10px);
     }
-    .button.secondary {
+    .proof-row b {
       color: #fff;
-      border-color: rgba(255,255,255,0.35);
-      background: rgba(255,255,255,0.07);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
     }
-    .button:hover { transform: translateY(-1px); }
+    .proof-row span {
+      color: rgba(255,255,255,.83);
+      font-size: 14px;
+      line-height: 1.4;
+    }
 
     main section {
-      padding: 74px clamp(20px, 5vw, 76px);
+      padding: 76px clamp(20px, 5vw, 76px);
     }
-    .intro {
+    .inner {
+      width: min(1220px, 100%);
+      margin: 0 auto;
+    }
+    .section-head {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(280px, 520px);
-      gap: 46px;
-      align-items: start;
-      background: #fff;
+      gap: 32px;
+      align-items: end;
+      margin-bottom: 28px;
     }
-    .section-kicker {
+    .kicker {
       margin: 0 0 12px;
       color: var(--teal);
       font-size: 12px;
       font-weight: 950;
-      letter-spacing: 0.14em;
+      letter-spacing: .14em;
       text-transform: uppercase;
     }
     h2 {
       margin: 0;
-      font-size: clamp(30px, 4vw, 52px);
-      line-height: 1.05;
+      max-width: 830px;
+      font-size: clamp(32px, 4.5vw, 58px);
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.18;
       letter-spacing: 0;
     }
     .lead {
-      margin: 20px 0 0;
-      color: #334155;
-      font-size: 19px;
-      max-width: 800px;
-    }
-    .position-panel {
-      border-left: 5px solid var(--red);
-      padding: 8px 0 8px 20px;
-    }
-    .position-panel p {
       margin: 0;
-      color: #1f2937;
-      font-size: 19px;
-      font-weight: 780;
-    }
-    .position-panel small {
-      display: block;
-      margin-top: 10px;
       color: var(--muted);
-      font-size: 14px;
+      font-size: 18px;
+      font-weight: 650;
     }
-
-    .feature-band { background: var(--soft); }
-    .section-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 24px;
-      align-items: end;
-      margin-bottom: 28px;
+    .intro {
+      background: #fff;
     }
-    .section-head p {
+    .intro-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
+      gap: 34px;
+      align-items: center;
+    }
+    .intro-copy p {
+      color: #314054;
+      font-size: 19px;
+      margin: 18px 0 0;
+    }
+    .position-box {
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--red);
+      border-radius: var(--radius);
+      padding: 22px;
+      background: #fbfcfe;
+    }
+    .position-box b {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+    .position-box p {
       margin: 0;
-      max-width: 520px;
       color: var(--muted);
       font-weight: 650;
+    }
+
+    .new {
+      background: var(--band);
     }
     .feature-grid {
       display: grid;
@@ -225,56 +275,161 @@
       gap: 14px;
     }
     .feature-card {
-      min-height: 210px;
+      min-height: 230px;
       background: #fff;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       padding: 22px;
+      box-shadow: 0 8px 24px rgba(13, 24, 42, .06);
     }
-    .feature-card b {
-      display: block;
-      margin-bottom: 10px;
-      font-size: 19px;
-    }
-    .feature-card p {
-      margin: 0;
-      color: var(--muted);
-    }
-    .feature-mark {
-      width: 42px;
-      height: 6px;
-      border-radius: 999px;
+    .feature-card .bar {
+      width: 44px;
+      height: 5px;
+      border-radius: 5px;
       margin-bottom: 18px;
       background: var(--teal);
     }
-    .feature-card:nth-child(2) .feature-mark,
-    .feature-card:nth-child(5) .feature-mark { background: var(--red); }
-    .feature-card:nth-child(3) .feature-mark,
-    .feature-card:nth-child(6) .feature-mark { background: var(--gold); }
+    .feature-card:nth-child(2) .bar,
+    .feature-card:nth-child(5) .bar { background: var(--red); }
+    .feature-card:nth-child(3) .bar,
+    .feature-card:nth-child(6) .bar { background: var(--gold); }
+    .feature-card p {
+      margin: 12px 0 0;
+      color: var(--muted);
+    }
+    .feature-card strong {
+      display: inline-block;
+      margin-top: 16px;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .product {
+      color: #fff;
+      background: var(--navy);
+    }
+    .product .kicker { color: #fbbf24; }
+    .product .lead { color: #c9d6e5; }
+    .console {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 0;
+      margin-top: 32px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: var(--radius);
+      background: #0f1b2e;
+      box-shadow: var(--shadow);
+    }
+    .console-side {
+      border-right: 1px solid rgba(255,255,255,.12);
+      padding: 18px;
+      background: #0d1728;
+    }
+    .console-logo {
+      width: 74px;
+      height: 74px;
+      object-fit: contain;
+      margin-bottom: 18px;
+    }
+    .console-tab {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 0;
+      color: #dbeafe;
+      font-size: 14px;
+      font-weight: 800;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .console-tab span:first-child {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: #18304d;
+      color: #fff;
+      font-size: 12px;
+    }
+    .console-main {
+      padding: 24px;
+      display: grid;
+      gap: 16px;
+    }
+    .signal-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .signal {
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: var(--radius);
+      padding: 14px;
+      background: rgba(255,255,255,.06);
+      min-height: 116px;
+    }
+    .signal b {
+      display: block;
+      font-size: 23px;
+      line-height: 1;
+    }
+    .signal span {
+      display: block;
+      margin-top: 8px;
+      color: #b9c9dd;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .case-table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.04);
+    }
+    .case-table th,
+    .case-table td {
+      padding: 13px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+      text-align: left;
+      font-size: 14px;
+    }
+    .case-table th {
+      color: #9fb5cf;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .case-table td {
+      color: #edf5ff;
+      font-weight: 700;
+    }
+    .case-table tr:last-child td { border-bottom: 0; }
 
     .workflow {
-      background: #111827;
-      color: #f8fafc;
+      background: #fff;
     }
-    .workflow .section-kicker { color: #fbbf24; }
-    .workflow .lead { color: #cbd5e1; }
     .steps {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 1px;
-      margin-top: 34px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.14);
-      border-radius: var(--radius);
       overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--line);
     }
     .step {
-      min-height: 230px;
+      min-height: 236px;
       padding: 24px;
-      background: #151f31;
+      background: #fff;
     }
     .step span {
-      color: #67e8f9;
+      color: var(--red);
       font-size: 13px;
       font-weight: 950;
     }
@@ -285,101 +440,162 @@
     }
     .step p {
       margin: 0;
-      color: #cbd5e1;
+      color: var(--muted);
     }
 
     .platforms {
-      background: #fff;
+      background: var(--band);
     }
-    .platform-strip {
+    .platform-layout {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(320px, 1.1fr);
+      gap: 32px;
+      align-items: start;
+    }
+    .surface-list {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-top: 28px;
+      margin-top: 24px;
     }
-    .platform-chip {
+    .surface {
       border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 9px 13px;
-      color: #1f2937;
+      border-radius: 6px;
+      padding: 9px 12px;
+      color: #26354b;
       background: #fff;
       font-weight: 850;
       font-size: 14px;
     }
-    .platform-chip:nth-child(3n) { border-color: #fecdd3; background: #fff1f2; }
-    .platform-chip:nth-child(3n + 1) { border-color: #99f6e4; background: #f0fdfa; }
-    .platform-chip:nth-child(3n + 2) { border-color: #fed7aa; background: #fff7ed; }
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .module {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      padding: 16px;
+      min-height: 132px;
+    }
+    .module b {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+    .module p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
 
     .tiers {
-      background: #f8fafc;
+      background: #fff;
     }
     .tier-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
-      margin-top: 28px;
     }
     .tier {
-      background: #fff;
       border: 1px solid var(--line);
       border-radius: var(--radius);
+      background: #fff;
       padding: 22px;
-    }
-    .tier h3 {
-      margin: 0 0 6px;
-      font-size: 24px;
+      min-height: 292px;
+      box-shadow: 0 8px 24px rgba(13, 24, 42, .06);
     }
     .tier .tag {
+      display: inline-block;
+      margin-bottom: 12px;
       color: var(--teal);
-      font-weight: 950;
       font-size: 12px;
+      font-weight: 950;
+      letter-spacing: .1em;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+    }
+    .tier p {
+      margin: 10px 0 0;
+      color: var(--muted);
     }
     .tier ul {
+      display: grid;
+      gap: 9px;
       margin: 18px 0 0;
       padding: 0;
       list-style: none;
-      display: grid;
-      gap: 10px;
-      color: #334155;
     }
     .tier li {
-      padding-left: 17px;
       position: relative;
+      padding-left: 17px;
+      color: #334155;
+      font-weight: 650;
     }
     .tier li::before {
       content: "";
       position: absolute;
       left: 0;
-      top: 0.68em;
+      top: .68em;
       width: 7px;
       height: 7px;
       border-radius: 50%;
       background: var(--red);
     }
+    .deployment-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
     .deployment {
-      margin-top: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfcfe;
+      padding: 16px;
+      min-height: 126px;
+    }
+    .deployment b {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+    .deployment span {
       color: var(--muted);
-      font-weight: 680;
+      font-size: 14px;
     }
 
-    .closing {
-      position: relative;
+    .evidence {
       color: #fff;
       background:
-        linear-gradient(90deg, rgba(7,12,22,0.96), rgba(7,12,22,0.84)),
-        url("assets/snapcase-logo.png") center right 8% / min(500px, 70vw) auto no-repeat,
+        linear-gradient(90deg, rgba(7,13,25,.96), rgba(7,13,25,.82)),
+        url("assets/snapcase-logo.png") center right 9% / min(430px, 64vw) auto no-repeat,
         #07101c;
     }
-    .closing h2 {
-      max-width: 900px;
+    .evidence .kicker { color: #67e8f9; }
+    .evidence h2 { max-width: 880px; }
+    .evidence p {
+      max-width: 760px;
+      color: rgba(255,255,255,.82);
+      font-size: 19px;
+      margin: 18px 0 0;
     }
-    .closing p {
-      max-width: 720px;
-      color: rgba(255,255,255,0.82);
-      font-size: 20px;
+    .evidence-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 28px;
+      max-width: 980px;
     }
+    .evidence-item {
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: rgba(255,255,255,.07);
+      color: #e8f3ff;
+      font-weight: 750;
+    }
+
     .site-footer {
       display: flex;
       justify-content: space-between;
@@ -392,36 +608,83 @@
       font-size: 14px;
     }
 
-    @media (max-width: 920px) {
-      nav { display: none; }
-      .hero {
-        min-height: 78vh;
-        background:
-          linear-gradient(180deg, rgba(7,12,22,0.96) 0%, rgba(7,12,22,0.88) 56%, rgba(7,12,22,0.7) 100%),
-          url("assets/snapcase-suite-mark.png") center bottom 32px / min(420px, 78vw) auto no-repeat,
-          #07101c;
-        padding-bottom: 300px;
-      }
-      .intro,
-      .feature-grid,
-      .steps,
-      .tier-grid {
+    @media (max-width: 1040px) {
+      .hero-grid,
+      .intro-grid,
+      .section-head,
+      .platform-layout {
         grid-template-columns: 1fr;
       }
-      .section-head {
-        display: block;
+      .hero {
+        min-height: auto;
+        padding-top: 120px;
+        background:
+          linear-gradient(180deg, rgba(7,13,25,.97) 0%, rgba(7,13,25,.88) 58%, rgba(7,13,25,.68) 100%),
+          url("assets/snapcase-suite-mark.png") center bottom 34px / min(420px, 76vw) auto no-repeat,
+          #07101c;
+        padding-bottom: 260px;
       }
-      .section-head p {
-        margin-top: 14px;
+      .hero-proof {
+        max-width: 760px;
+      }
+      .feature-grid,
+      .tier-grid,
+      .deployment-grid,
+      .evidence-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .steps,
+      .signal-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .console {
+        grid-template-columns: 1fr;
+      }
+      .console-side {
+        border-right: 0;
+        border-bottom: 1px solid rgba(255,255,255,.12);
+      }
+      .console-logo {
+        width: 62px;
+        height: 62px;
       }
     }
 
-    @media (max-width: 560px) {
+    @media (max-width: 720px) {
+      nav { display: none; }
+      main section {
+        padding: 58px 20px;
+      }
+      .site-header {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
       .brand span { font-size: 16px; }
-      .hero { padding-left: 20px; padding-right: 20px; }
-      main section { padding: 56px 20px; }
-      .hero-actions { align-items: stretch; flex-direction: column; }
+      .hero {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
       .button { width: 100%; }
+      .feature-grid,
+      .tier-grid,
+      .deployment-grid,
+      .module-grid,
+      .evidence-list,
+      .steps,
+      .signal-grid {
+        grid-template-columns: 1fr;
+      }
+      .proof-row {
+        grid-template-columns: 1fr;
+      }
+      .case-table th:nth-child(3),
+      .case-table td:nth-child(3) {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -432,178 +695,290 @@
       <span>SnapCase</span>
     </a>
     <nav aria-label="Primary navigation">
-      <a href="#features">Features</a>
+      <a href="#new">New Features</a>
       <a href="#workflow">Workflow</a>
       <a href="#platforms">Platforms</a>
-      <a href="#tiers">Product</a>
+      <a href="#tiers">Tiers</a>
     </nav>
   </header>
 
   <section id="top" class="hero">
-    <div class="hero-copy">
-      <p class="eyebrow">Public Evidence Intelligence</p>
-      <h1>SnapCase</h1>
-      <p class="hero-lede">An investigator-first platform for preserving public online evidence, organizing social media captures, and finding the signals that matter inside a case.</p>
-      <div class="hero-actions">
-        <a class="button primary" href="#features">Explore Features</a>
-        <a class="button secondary" href="#tiers">View Product Tiers</a>
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">Public Evidence Intelligence</p>
+        <h1>SnapCase</h1>
+        <p class="hero-lede">An investigator-first platform for preserving public online evidence, organizing social captures, and surfacing the case signals that matter.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#new">See What Is New</a>
+          <a class="button secondary" href="#tiers">Compare Tiers</a>
+        </div>
+      </div>
+      <div class="hero-proof" aria-label="SnapCase product summary">
+        <div class="proof-row">
+          <b>Capture</b>
+          <span>Profiles, posts, screenshots, comments, media, bookmarks, source links, and local evidence files.</span>
+        </div>
+        <div class="proof-row">
+          <b>Analyze</b>
+          <span>OCR, keyword search, face index, object/detail matching, case targets, profile themes, and Reddit analysis.</span>
+        </div>
+        <div class="proof-row">
+          <b>Report</b>
+          <span>Case-ready HTML reports with investigator details, hashes, local links, activity logs, and source context.</span>
+        </div>
       </div>
     </div>
   </section>
 
   <main>
     <section class="intro">
-      <div>
-        <p class="section-kicker">What SnapCase Is</p>
-        <h2>Evidence capture with investigative context.</h2>
-        <p class="lead">SnapCase helps investigators preserve public social media evidence while they work: profiles, posts, comments, screenshots, media, source links, local files, hashes, bookmarks, and case-ready reports stay organized in one controlled case folder.</p>
+      <div class="inner intro-grid">
+        <div class="intro-copy">
+          <p class="kicker">What SnapCase Is</p>
+          <h2>Evidence capture with investigative context.</h2>
+          <p>SnapCase is built for the working moment when an investigator is already reviewing public evidence and needs to preserve it clearly. It keeps source links, local files, hashes, OCR text, comments, media, bookmarks, and reports tied to the case instead of scattered across browser tabs and folders.</p>
+        </div>
+        <aside class="position-box">
+          <b>Between preservation and OSINT intelligence.</b>
+          <p>SnapCase sits between legal web evidence preservation tools, enterprise OSINT identity platforms, and high-end forensic lab suites: more intelligence-aware than simple capture, more evidence-focused than broad aggregation, and practical for local investigator-controlled cases.</p>
+        </aside>
       </div>
-      <aside class="position-panel">
-        <p>SnapCase sits between web evidence preservation tools and enterprise OSINT suites.</p>
-        <small>It is more intelligence-driven than simple page capture, more evidence-focused than broad source aggregation, and designed around the investigator's live review workflow.</small>
-      </aside>
     </section>
 
-    <section id="features" class="feature-band">
-      <div class="section-head">
-        <div>
-          <p class="section-kicker">Core Features</p>
-          <h2>Built around the case, not the browser tab.</h2>
+    <section id="new" class="new">
+      <div class="inner">
+        <div class="section-head">
+          <div>
+            <p class="kicker">New In SnapCase</p>
+            <h2>Current case intelligence, not just saved pages.</h2>
+          </div>
+          <p class="lead">The newest SnapCase work sharpens the investigator console: richer platform modules, case targets, local index protection, visual matching, and report-ready review outputs.</p>
         </div>
-        <p>Every capture is designed to keep source context, local preservation, and review value together.</p>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="bar"></div>
+            <h3>Case modes and licensing gates</h3>
+            <p>Simple capture, standard review, and intelligence indexing modes help match processing depth to the case goal and product tier.</p>
+            <strong>Reporter to Monitor</strong>
+          </article>
+          <article class="feature-card">
+            <div class="bar"></div>
+            <h3>Case targets and global targets</h3>
+            <p>Investigators can define faces, objects, names, handles, keywords, phones, and other identifiers, then promote targets for cross-case recognition.</p>
+            <strong>Investigator and Monitor</strong>
+          </article>
+          <article class="feature-card">
+            <div class="bar"></div>
+            <h3>Local encrypted index</h3>
+            <p>Monitor workflows add encrypted local memory for repeated identifiers, visual targets, and historical collision detection while keeping control on the investigator machine.</p>
+            <strong>Monitor</strong>
+          </article>
+          <article class="feature-card">
+            <div class="bar"></div>
+            <h3>OCR and keyword reports</h3>
+            <p>OCR case media, bookmark media, captured post images, sampled video frames, comments, and saved text can be searched for names, handles, phrases, and case terms.</p>
+            <strong>Reporter plus</strong>
+          </article>
+          <article class="feature-card">
+            <div class="bar"></div>
+            <h3>Visual matching and face index</h3>
+            <p>Build browsable detected-face indexes, search a selected face, and compare distinctive objects or details across captured case media.</p>
+            <strong>Investigator plus</strong>
+          </article>
+          <article class="feature-card">
+            <div class="bar"></div>
+            <h3>Platform account awareness</h3>
+            <p>Account slots, active-account controls, profile context, and platform report indicators keep multi-account investigations clearer.</p>
+            <strong>Case organization</strong>
+          </article>
+        </div>
       </div>
-      <div class="feature-grid">
-        <article class="feature-card">
-          <div class="feature-mark"></div>
-          <b>Profile and post capture</b>
-          <p>Preserve public accounts, post pages, screenshots, metadata, media files, publication details, and source URLs in a structured case folder.</p>
-        </article>
-        <article class="feature-card">
-          <div class="feature-mark"></div>
-          <b>Comments and replies</b>
-          <p>Collect relevant comment threads and replies where platforms expose them, keeping authors, timestamps, links, and local report context together.</p>
-        </article>
-        <article class="feature-card">
-          <div class="feature-mark"></div>
-          <b>Bookmarks and selected findings</b>
-          <p>Mark posts, media, comments, and time moments as case findings, then open platform-specific or global bookmark reports.</p>
-        </article>
-        <article class="feature-card">
-          <div class="feature-mark"></div>
-          <b>Report-ready evidence</b>
-          <p>Generate investigator-facing HTML reports with case metadata, logos, sections, source links, activity logs, hashes, and captured files.</p>
-        </article>
-        <article class="feature-card">
-          <div class="feature-mark"></div>
-          <b>Media intelligence</b>
-          <p>Investigator tiers add OCR, keyword checks, video frame extraction, face/object/detail matching, and visual indexing when the case goal calls for it.</p>
-        </article>
-        <article class="feature-card">
-          <div class="feature-mark"></div>
-          <b>Case targets and alerts</b>
-          <p>Track case keywords, names, identifiers, faces, logos, and recurring media so important matches are surfaced during review.</p>
-        </article>
+    </section>
+
+    <section class="product">
+      <div class="inner">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Investigator Console</p>
+            <h2>The app is organized around active case work.</h2>
+          </div>
+          <p class="lead">SnapCase keeps capture controls, analytics actions, saved evidence, report buttons, and case database checks close to the investigator's review path.</p>
+        </div>
+        <div class="console" aria-label="SnapCase interface overview">
+          <div class="console-side">
+            <img class="console-logo" src="assets/snapcase-logo.png" alt="SnapCase logo" />
+            <div class="console-tab"><span>FB</span><span>Facebook evidence</span></div>
+            <div class="console-tab"><span>IG</span><span>Instagram and Threads</span></div>
+            <div class="console-tab"><span>X</span><span>X and public posts</span></div>
+            <div class="console-tab"><span>YT</span><span>YouTube reports</span></div>
+            <div class="console-tab"><span>AI</span><span>OCR and matching</span></div>
+          </div>
+          <div class="console-main">
+            <div class="signal-grid">
+              <div class="signal"><b>12</b><span>Platform modules and capture surfaces</span></div>
+              <div class="signal"><b>3</b><span>Case processing depths for preservation to intelligence</span></div>
+              <div class="signal"><b>Local</b><span>Encrypted index option for cross-case memory</span></div>
+              <div class="signal"><b>HTML</b><span>Reports with source and local evidence links</span></div>
+            </div>
+            <table class="case-table">
+              <thead>
+                <tr><th>Workflow</th><th>What It Preserves</th><th>Investigator Value</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Profile capture</td><td>Public account context, source links, local files</td><td>Clean case baseline</td></tr>
+                <tr><td>Bookmarks</td><td>Selected posts, media, comments, moments</td><td>Focused findings list</td></tr>
+                <tr><td>OCR and search</td><td>Image text, saved text, comments, names</td><td>Fast triage and hit reports</td></tr>
+                <tr><td>Visual matching</td><td>Faces, objects, details, thumbnails</td><td>Explainable media leads</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </section>
 
     <section id="workflow" class="workflow">
-      <p class="section-kicker">Investigator Workflow</p>
-      <h2>From public page to organized evidence package.</h2>
-      <p class="lead">SnapCase is made for the moment an investigator is already looking at public evidence and needs to preserve it clearly without losing the trail.</p>
-      <div class="steps">
-        <article class="step">
-          <span>01</span>
-          <b>Open a case</b>
-          <p>Set the case, investigator, agency, logo, capture goal, and processing level.</p>
-        </article>
-        <article class="step">
-          <span>02</span>
-          <b>Capture what matters</b>
-          <p>Save profiles, posts, videos, comments, screenshots, bookmarks, and selected media.</p>
-        </article>
-        <article class="step">
-          <span>03</span>
-          <b>Analyze where needed</b>
-          <p>Run OCR, keyword review, media matching, frame extraction, and local indexing based on the selected tier.</p>
-        </article>
-        <article class="step">
-          <span>04</span>
-          <b>Report the work</b>
-          <p>Open platform reports, global bookmarks, activity logs, and case summaries with clear source attribution.</p>
-        </article>
+      <div class="inner">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Workflow</p>
+            <h2>From public page to organized evidence package.</h2>
+          </div>
+          <p class="lead">SnapCase helps investigators preserve public evidence without losing the trail of why something mattered.</p>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <span>01</span>
+            <b>Open the case</b>
+            <p>Set investigator details, agency information, case mode, default folders, profile context, and active account state.</p>
+          </article>
+          <article class="step">
+            <span>02</span>
+            <b>Capture the source</b>
+            <p>Save profile pages, posts, screenshots, comments, visible public media, listings, channel data, and selected bookmarks.</p>
+          </article>
+          <article class="step">
+            <span>03</span>
+            <b>Run focused analysis</b>
+            <p>Use OCR, keyword/name search, phone lookup, profile themes, face indexing, object matching, Scout, and Sentry when needed.</p>
+          </article>
+          <article class="step">
+            <span>04</span>
+            <b>Report the work</b>
+            <p>Produce platform reports, global bookmark reports, local evidence links, hashes, source URLs, activity logs, and case summaries.</p>
+          </article>
+        </div>
       </div>
     </section>
 
     <section id="platforms" class="platforms">
-      <p class="section-kicker">Supported Investigative Surfaces</p>
-      <h2>Designed for public social and web evidence.</h2>
-      <p class="lead">SnapCase focuses on public-source capture workflows across major platforms and evidence types used in modern online investigations.</p>
-      <div class="platform-strip" aria-label="Supported surfaces">
-        <span class="platform-chip">Facebook</span>
-        <span class="platform-chip">Instagram</span>
-        <span class="platform-chip">TikTok</span>
-        <span class="platform-chip">Reddit</span>
-        <span class="platform-chip">X</span>
-        <span class="platform-chip">YouTube</span>
-        <span class="platform-chip">Threads</span>
-        <span class="platform-chip">Telegram</span>
-        <span class="platform-chip">Marketplace and listings</span>
-        <span class="platform-chip">Screenshots</span>
-        <span class="platform-chip">Video frames</span>
-        <span class="platform-chip">Bookmarks</span>
+      <div class="inner platform-layout">
+        <div>
+          <p class="kicker">Supported Surfaces</p>
+          <h2>Built for public social and listing evidence.</h2>
+          <p class="lead" style="margin-top:18px;">SnapCase focuses on the public-source surfaces investigators actually review: profiles, posts, comments, media, marketplaces, public channels, screenshots, and selected findings.</p>
+          <div class="surface-list" aria-label="Supported SnapCase surfaces">
+            <span class="surface">Facebook</span>
+            <span class="surface">Instagram</span>
+            <span class="surface">Threads</span>
+            <span class="surface">TikTok</span>
+            <span class="surface">YouTube</span>
+            <span class="surface">Snapchat</span>
+            <span class="surface">LinkedIn</span>
+            <span class="surface">Reddit</span>
+            <span class="surface">X</span>
+            <span class="surface">Marketplace</span>
+            <span class="surface">Kijiji</span>
+            <span class="surface">Translate</span>
+          </div>
+        </div>
+        <div class="module-grid">
+          <article class="module">
+            <b>Social profile and post modules</b>
+            <p>Preserve public account context, post pages, timelines, captions, screenshots, and source URLs across major platforms.</p>
+          </article>
+          <article class="module">
+            <b>Listings and marketplace capture</b>
+            <p>Capture seller pages, ads, listing metadata, thumbnails, local files, and reports for marketplace-style investigations.</p>
+          </article>
+          <article class="module">
+            <b>Comments, bookmarks, and reports</b>
+            <p>Keep selected findings, comment context, global bookmarks, and platform reports close to the evidence package.</p>
+          </article>
+          <article class="module">
+            <b>Companion video workflow</b>
+            <p>Video downloading can remain a separate companion workflow while SnapCase Suite stays focused on case evidence, analytics, and reporting.</p>
+          </article>
+        </div>
       </div>
     </section>
 
     <section id="tiers" class="tiers">
-      <div class="section-head">
-        <div>
-          <p class="section-kicker">Product Ladder</p>
-          <h2>Choose the processing depth the case needs.</h2>
+      <div class="inner">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Product Ladder</p>
+            <h2>Processing depth scales with the investigation.</h2>
+          </div>
+          <p class="lead">SnapCase keeps high-value intelligence features in the tiers designed for that work instead of flattening everything into basic capture.</p>
         </div>
-        <p>SnapCase keeps high-value intelligence features in the tiers built for that work.</p>
+        <div class="tier-grid">
+          <article class="tier">
+            <span class="tag">Fast preservation</span>
+            <h3>Reporter</h3>
+            <p>For investigators who need structured capture, reports, hashes, OCR, and local case management.</p>
+            <ul>
+              <li>Public evidence capture</li>
+              <li>Bookmarks, comments, source links, and activity logs</li>
+              <li>OCR case media and keyword reports</li>
+              <li>Local case folders and report-ready HTML output</li>
+            </ul>
+          </article>
+          <article class="tier">
+            <span class="tag">Case intelligence</span>
+            <h3>Investigator</h3>
+            <p>For deeper case review with visual matching, target lists, and richer media intelligence.</p>
+            <ul>
+              <li>Everything in Reporter</li>
+              <li>Case targets, profile themes, and account signals</li>
+              <li>Face index, face match, and object/detail match</li>
+              <li>Phone/name lookup and richer media triage</li>
+            </ul>
+          </article>
+          <article class="tier">
+            <span class="tag">Cross-case memory</span>
+            <h3>Monitor</h3>
+            <p>For recurring investigations where repeated people, media, identifiers, and targets matter across cases.</p>
+            <ul>
+              <li>Everything in Investigator</li>
+              <li>Local encrypted index and unlock protection</li>
+              <li>Historical collision detection</li>
+              <li>Sentry-style monitoring and global target workflows</li>
+            </ul>
+          </article>
+        </div>
+        <div class="deployment-grid" aria-label="Deployment and packaging options">
+          <div class="deployment"><b>Small Team / NAS</b><span>Shared master index, collaboration, governance, and repeated identifier/media discovery across team cases.</span></div>
+          <div class="deployment"><b>Corporate Server</b><span>On-prem file keeper and shared evidence repository for controlled internal deployments.</span></div>
+          <div class="deployment"><b>AWS Managed</b><span>Cloud processing and storage options with audit logs, retention, support, and usage bands.</span></div>
+          <div class="deployment"><b>On Demand</b><span>Per-case local or AWS-assisted support for short investigations and overflow work.</span></div>
+        </div>
       </div>
-      <div class="tier-grid">
-        <article class="tier">
-          <span class="tag">Fast preservation</span>
-          <h3>Reporter</h3>
-          <ul>
-            <li>Public evidence capture</li>
-            <li>Case reports and activity logs</li>
-            <li>Hashing, comments, bookmarks, and local case files</li>
-            <li>Simple capture mode for speed-first preservation</li>
-          </ul>
-        </article>
-        <article class="tier">
-          <span class="tag">Case intelligence</span>
-          <h3>Investigator</h3>
-          <ul>
-            <li>Reporter workflow plus OCR and keyword review</li>
-            <li>Face, object, logo, and detail matching inside a case</li>
-            <li>Case targets, profile themes, and media signatures</li>
-            <li>Standard review mode for richer post-capture processing</li>
-          </ul>
-        </article>
-        <article class="tier">
-          <span class="tag">Cross-case memory</span>
-          <h3>Monitor</h3>
-          <ul>
-            <li>Investigator workflow plus local encrypted indexing</li>
-            <li>Historical collision detection across active cases</li>
-            <li>Target alerts and repeated media or identifier discovery</li>
-            <li>Intelligence indexing for deeper case correlation</li>
-          </ul>
-        </article>
-      </div>
-      <p class="deployment">Deployment options can extend to small-team local indexes, NAS/shared repositories, corporate on-prem file keeping, AWS managed processing, and on-demand case support.</p>
     </section>
 
-    <section class="closing">
-      <p class="section-kicker">Why It Matters</p>
-      <h2>Public evidence work should preserve the source and help the investigator see the pattern.</h2>
-      <p>SnapCase is built to keep evidence packages understandable: thumbnails, source links, local links, capture logs, comments, OCR text, media matches, and case context remain close to the investigator's decision-making.</p>
-      <div class="hero-actions">
-        <a class="button primary" href="#top">Back to Top</a>
-        <a class="button secondary" href="https://github.com/snapcaseforensics-max" target="_blank" rel="noopener">GitHub Organization</a>
+    <section class="evidence">
+      <div class="inner">
+        <p class="kicker">Why It Matters</p>
+        <h2>Public evidence work should preserve the source and help the investigator see the pattern.</h2>
+        <p>SnapCase keeps the evidence package understandable: thumbnails, source links, local links, capture logs, OCR text, comments, media matches, target hits, and case context stay close to the investigator's decisions.</p>
+        <div class="evidence-list">
+          <div class="evidence-item">Investigator-controlled local evidence packages</div>
+          <div class="evidence-item">Explainable alerts with source and local links</div>
+          <div class="evidence-item">Reports built for review, handoff, and disclosure</div>
+        </div>
+        <div class="hero-actions">
+          <a class="button primary" href="#top">Back to Top</a>
+          <a class="button secondary" href="https://github.com/snapcaseforensics-max" target="_blank" rel="noopener">GitHub Organization</a>
+        </div>
       </div>
     </section>
   </main>
